@@ -4,32 +4,44 @@ new Vue({
         playerHealth: 100,
         monsterHealth: 100,
         startedGame: false,
+        turns: []
     },
     methods: {
         startGame: function(){
             this.startedGame = true;
             this.playerHealth = 100;
             this.monsterHealth = 100;
+            this.turns = [];
         },
         attack: function () {
-            this.monsterHealth -= this.calculateDamage(5, 10);
+            var damage = this.calculateDamage(5, 10);
+            this.monsterHealth -= damage;
+            this.turns.unshift({
+                isPlayer: true,
+                text: 'Player hits Monster for:' + ' ' + damage
+            });
             if(this.checkWin()){
                 return;
             };
-            this.playerHealth -= this.calculateDamage(7, 12);
-            this.checkWin();
+            this.monsterDamage();
         },
         specialAttack: function () {
-            this.monsterHealth -= this.calculateDamage(30, 15);
+            var damage = this.calculateDamage(15, 30);
+            this.monsterHealth -= damage;
+            this.turns.unshift({
+                isPlayer: true,
+                text: 'Player heavily hits Monster for:' + ' ' + damage
+            });
             this.checkWin();
-            this.playerHealth -= this.calculateDamage(12, 7);
-            this.checkWin();
+            this.monsterDamage();
         },
         heal: function () {
-            this.playerHealth += this.calculateDamage(20, 10);
-            if (this.playerHealth >= 100) {
-                this.playerHealth = 100
-            }
+            if (this.playerHealth <= 90) {
+                this.playerHealth += 10;
+            }else {
+                this.playerHealth = 100;
+            };
+            this.monsterDamage();
         },
         giveUp: function(){
             this.startedGame = false;
@@ -38,6 +50,15 @@ new Vue({
         },
         calculateDamage: function(min, max) {
             return Math.max(Math.floor((Math.random() * max) + 1, min));
+        },
+        monsterDamage: function () {
+            var damage = this.calculateDamage(12, 7);
+            this.playerHealth -= damage;
+            this.turns.unshift({
+                isPlayer: false,
+                text: 'Monster hits Player for:' + ' ' + damage
+            });
+            this.checkWin();
         },
         checkWin: function() {
             if (this.monsterHealth <= 0) {
