@@ -45,6 +45,8 @@ new Vue({
                     this.startGame();
                 }else{
                     this.startedGame = false;
+                    this.playerHealth = 100;
+                    this.monsterHealth = 100;
                 }
                 return true;
             };
@@ -53,6 +55,8 @@ new Vue({
                     this.startGame();
                 } else {
                     this.startedGame = false;
+                    this.playerHealth = 100;
+                    this.monsterHealth = 100;
                 }
                 return true;
             }
