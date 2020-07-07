@@ -12,39 +12,21 @@ new Vue({
             this.monsterHealth = 100;
         },
         attack: function () {
-            var max = 10;
-            var min = 5;
-            var damage = Math.max(Math.floor((Math.random() * max) + 1, min));
-            this.monsterHealth -= damage;
-            if (this.monsterHealth <= 0) {
-                alert('YOU WON')
-                this.startedGame = false;
-            }
-
-            max = 12;
-            min = 7;
-            damage = Math.max(Math.floor((Math.random() * max) + 1, min));
-            this.playerHealth -= damage;
-            if (this.playerHealth <= 0) {
-                alert('YOU LOOSE, TRY AGAIN')
-                this.startedGame = false;
-            }
+            this.monsterHealth -= this.calculateDamage(5, 10);
+            if(this.checkWin()){
+                return;
+            };
+            this.playerHealth -= this.calculateDamage(7, 12);
+            this.checkWin();
         },
         specialAttack: function () {
-            var max = 25;
-            var min = 10;
-            var damage = Math.max(Math.floor((Math.random() * max) + 1, min));
-            this.monsterHealth -= damage;
-            if (this.monsterHealth <= 0) {
-                alert('YOU WON')
-                this.startedGame = false;
-            }
+            this.monsterHealth -= this.calculateDamage(30, 15);
+            this.checkWin();
+            this.playerHealth -= this.calculateDamage(12, 7);
+            this.checkWin();
         },
         heal: function () {
-            var max = 15;
-            var min = 5;
-            var damage = Math.max(Math.floor((Math.random() * max) + 1, min));
-            this.playerHealth += damage;
+            this.playerHealth += this.calculateDamage(20, 10);
             if (this.playerHealth >= 100) {
                 this.playerHealth = 100
             }
@@ -53,6 +35,28 @@ new Vue({
             this.startedGame = false;
             this.playerHealth = 100;
             this.monsterHealth = 100;
+        },
+        calculateDamage: function(min, max) {
+            return Math.max(Math.floor((Math.random() * max) + 1, min));
+        },
+        checkWin: function() {
+            if (this.monsterHealth <= 0) {
+                if (confirm('YOU WON!! Start a New Game?')){
+                    this.startGame();
+                }else{
+                    this.startedGame = false;
+                }
+                return true;
+            };
+            if (this.playerHealth <= 0) {
+                if (confirm('YOU LOST!! Start a New Game?')) {
+                    this.startGame();
+                } else {
+                    this.startedGame = false;
+                }
+                return true;
+            }
+            return false;    
         }
     },
 });
