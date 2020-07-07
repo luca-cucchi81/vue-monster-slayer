@@ -3,7 +3,6 @@ new Vue({
     data: {
         playerHealth: 100,
         monsterHealth: 100,
-        gameIsRunning: false,
-        show: false
+        startedGame: false,
     }
 });
